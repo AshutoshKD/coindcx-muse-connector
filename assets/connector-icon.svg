@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Crypto Coin connector icon">
+  <!-- Original mark for Muse — not the official CoinDCX logo -->
+  <circle cx="256" cy="256" r="248" fill="#FF6B00"/>
+  <g fill="#FFFFFF" transform="translate(-6 0)">
+    <!-- Open C (currency-style) -->
+    <path d="
+      M 348 178
+      A 26 26 0 0 0 311 154
+      A 118 118 0 1 0 311 358
+      A 26 26 0 0 0 348 334
+      A 150 150 0 1 1 348 178
+      Z
+      M 295 196
+      A 76 76 0 1 0 295 316
+      A 26 26 0 0 1 332 292
+      A 108 108 0 1 1 332 220
+      A 26 26 0 0 1 295 196
+      Z
+    " fill-rule="evenodd"/>
+    <!-- Twin currency bars (top / bottom) -->
+    <rect x="214" y="114" width="20" height="36" rx="6"/>
+    <rect x="250" y="114" width="20" height="36" rx="6"/>
+    <rect x="214" y="362" width="20" height="36" rx="6"/>
+    <rect x="250" y="362" width="20" height="36" rx="6"/>
+  </g>
+</svg>

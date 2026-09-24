@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CoinDCX for Muse — API docs</title>
+  <meta name="description" content="Voice-ready Pure API connector for CoinDCX India. Connect per-user API keys, quote→confirm trading, portfolio, movers, alerts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0c0f14;
+      --bg-elev: #141922;
+      --bg-soft: #1a2130;
+      --line: #2a3344;
+      --text: #e8edf5;
+      --muted: #93a0b5;
+      --orange: #ff6b00;
+      --orange-dim: rgba(255, 107, 0, 0.14);
+      --green: #3dd68c;
+      --blue: #6eb6ff;
+      --radius: 12px;
+      --max: 920px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Sora, system-ui, sans-serif;
+      background:
+        radial-gradient(900px 480px at 10% -10%, rgba(255,107,0,0.16), transparent 55%),
+        radial-gradient(700px 400px at 100% 0%, rgba(110,182,255,0.08), transparent 50%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+    a { color: var(--orange); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    code, .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 0.9em; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 20px 80px; }
+    header.hero {
+      padding: 48px 0 28px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 36px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+    }
+    .mark {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--orange); color: #fff;
+      display: grid; place-items: center;
+      font-weight: 700; font-size: 1.35rem;
+      box-shadow: 0 0 0 4px var(--orange-dim);
+    }
+    .brand h1 {
+      margin: 0; font-size: 1.55rem; font-weight: 700; letter-spacing: -0.02em;
+    }
+    .brand p { margin: 2px 0 0; color: var(--muted); font-size: 0.92rem; }
+    .lede {
+      font-size: 1.05rem; color: var(--muted); max-width: 62ch; margin: 0 0 20px;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 11px; border-radius: 999px;
+      background: var(--bg-elev); border: 1px solid var(--line);
+      font-size: 0.8rem; color: var(--muted);
+    }
+    .chip strong { color: var(--text); font-weight: 600; }
+    .chip.ok strong { color: var(--green); }
+    nav.toc {
+      display: flex; flex-wrap: wrap; gap: 10px 16px;
+      padding: 14px 0 8px; margin-bottom: 8px;
+      font-size: 0.88rem;
+    }
+    nav.toc a { color: var(--muted); }
+    nav.toc a:hover { color: var(--text); }
+    section {
+      margin: 40px 0;
+    }
+    h2 {
+      margin: 0 0 12px; font-size: 1.25rem; letter-spacing: -0.02em;
+      padding-bottom: 10px; border-bottom: 1px solid var(--line);
+    }
+    h3 { margin: 22px 0 8px; font-size: 1rem; color: var(--text); }
+    p, li { color: var(--muted); }
+    strong { color: var(--text); }
+    .panel {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      margin: 14px 0;
+    }
+    .steps { counter-reset: step; list-style: none; padding: 0; margin: 0; }
+    .steps li {
+      counter-increment: step;
+      position: relative;
+      padding: 12px 12px 12px 48px;
+      border-bottom: 1px solid var(--line);
+    }
+    .steps li:last-child { border-bottom: 0; }
+    .steps li::before {
+      content: counter(step);
+      position: absolute; left: 8px; top: 12px;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--orange-dim); color: var(--orange);
+      display: grid; place-items: center;
+      font-size: 0.78rem; font-weight: 700;
+    }
+    pre {
+      margin: 10px 0 0;
+      padding: 14px 16px;
+      background: #080a0e;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow-x: auto;
+      color: #d7e0ef;
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+    .method {
+      display: inline-block;
+      min-width: 3.4rem; text-align: center;
+      padding: 2px 7px; border-radius: 6px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.72rem; font-weight: 500;
+      margin-right: 8px;
+    }
+    .get { background: rgba(61,214,140,0.15); color: var(--green); }
+    .post { background: rgba(110,182,255,0.15); color: var(--blue); }
+    .del { background: rgba(255,107,0,0.15); color: var(--orange); }
+    table {
+      width: 100%; border-collapse: collapse; margin: 12px 0 18px;
+      font-size: 0.88rem;
+    }
+    th, td {
+      text-align: left; padding: 10px 10px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    th { color: var(--muted); font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; }
+    td:first-child { white-space: nowrap; }
+    .path { color: var(--text); font-family: "IBM Plex Mono", monospace; font-size: 0.82rem; }
+    .note {
+      border-left: 3px solid var(--orange);
+      padding: 10px 14px;
+      background: var(--orange-dim);
+      border-radius: 0 10px 10px 0;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+    footer {
+      margin-top: 56px; padding-top: 20px;
+      border-top: 1px solid var(--line);
+      color: var(--muted); font-size: 0.85rem;
+    }
+    footer nav { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="brand">
+        <div class="mark" aria-hidden="true">C</div>
+        <div>
+          <h1>CoinDCX for Muse</h1>
+          <p>Pure API connector · India · v1.3.0</p>
+        </div>
+      </div>
+      <p class="lede">
+        Voice-ready crypto trading for Meta Muse. Users connect their own CoinDCX API keys;
+        the connector quotes fees, waits for confirmation, then places spot orders on CoinDCX.
+        Unofficial third-party — not affiliated with or endorsed by CoinDCX.
+      </p>
+      <div class="chips">
+        <span class="chip ok"><strong id="health">●</strong> checking…</span>
+        <span class="chip"><strong>Base</strong>&nbsp;<span class="mono">https://coindcx-muse-connector.vercel.app</span></span>
+        <span class="chip"><strong>Auth</strong>&nbsp;API keys</span>
+        <span class="chip"><strong>Region</strong>&nbsp;India (INR pairs)</span>
+        <span class="chip"><strong>Payments</strong>&nbsp;none (wallet balance only)</span>
+      </div>
+      <nav class="toc" aria-label="On this page">
+        <a href="#quickstart">Quick start</a>
+        <a href="#auth">Auth</a>
+        <a href="#trading">Trading flow</a>
+        <a href="#endpoints">Endpoints</a>
+        <a href="#examples">Examples</a>
+        <a href="#limits">Limits &amp; access</a>
+        <a href="#json">Machine JSON</a>
+      </nav>
+    </header>
+
+    <section id="quickstart">
+      <h2>Quick start</h2>
+      <ol class="steps panel">
+        <li>
+          <strong>Create CoinDCX API keys</strong> — CoinDCX → Profile → API Dashboard.
+          Enable balance + trading. Prefer <em>no IP binding</em> unless you allowlist connector hosts.
+        </li>
+        <li>
+          <strong>Get a connector review key</strong> — ask
+          <a href="mailto:ashutosh.db.mail@gmail.com">ashutosh.db.mail@gmail.com</a>
+          for <code>x-connector-key</code> (Muse ↔ this server).
+        </li>
+        <li>
+          <strong>Connect the user</strong> — <code>POST /account/connect</code> with
+          <code>{ "api_key", "api_secret" }</code>. Store the returned <code>connection_token</code>.
+        </li>
+        <li>
+          <strong>Call voice APIs</strong> — send
+          <code>X-COINDCX-CONNECTION</code> + <code>x-connector-key</code> on every request.
+        </li>
+      </ol>
+    </section>
+
+    <section id="auth">
+      <h2>Authentication</h2>
+      <p>Two layers. CoinDCX has <strong>no OAuth</strong> for trading — this connector uses API keys only.</p>
+      <table>
+        <thead><tr><th>Header</th><th>Who</th><th>Purpose</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><code>x-connector-key</code></td>
+            <td>Muse / reviewer</td>
+            <td>Shared secret proving the caller is allowed to use this deployment</td>
+          </tr>
+          <tr>
+            <td><code>X-COINDCX-CONNECTION</code></td>
+            <td>Per user</td>
+            <td>Encrypted token from <code>POST /account/connect</code> (preferred)</td>
+          </tr>
+          <tr>
+            <td><code>X-COINDCX-API-KEY</code> + <code>X-COINDCX-API-SECRET</code></td>
+            <td>Debug only</td>
+            <td>Raw keys instead of the connection token</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="note">
+        Keys are sealed per user and never shared across accounts. The connector does not custody INR or crypto.
+      </div>
+    </section>
+
+    <section id="trading">
+      <h2>Safe voice trading</h2>
+      <p>Prefer quote → confirm so Muse can speak fees before any live order.</p>
+      <div class="panel">
+        <ol class="steps">
+          <li><code>POST /orders/quote</code> with <code>side</code>, <code>coin</code>, and <code>amount_inr</code> (or <code>quantity</code> / <code>all</code> for sells).</li>
+          <li>Read <code>spoken_summary</code> + fee fields aloud. Keep <code>quote_id</code>.</li>
+          <li>On user confirm: <code>POST /orders/confirm</code> with <code>{ "quote_id" }</code>. Server waits for fill (~12s).</li>
+        </ol>
+      </div>
+      <p>Amounts are <strong>INR-native</strong> (<code>amount_inr</code>), not USD.</p>
+    </section>
+
+    <section id="endpoints">
+      <h2>Endpoints</h2>
+      <p>All routes below (except health / this page / privacy / terms) require <code>x-connector-key</code>. Account, orders, wallets also need a connected CoinDCX user.</p>
+
+      <h3>System</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Path</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method get">GET</span></td><td class="path">/health</td><td>Liveness — no auth</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/privacy</td><td>Privacy policy HTML</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/terms</td><td>Terms of service HTML</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/?format=json</td><td>Machine-readable index</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Account</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Path</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method post">POST</span></td><td class="path">/account/connect</td><td>Body: <code>api_key</code>, <code>api_secret</code> → <code>connection_token</code></td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/account/disconnect</td><td>Client should drop the token</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/account/portfolio</td><td>Holdings valued in INR + spoken summary</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/account/holding?coin=BTC</td><td>Single holding</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/account/pnl</td><td>Day / period style PnL summary</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/account/balances</td><td>Raw non-zero balances</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/account/info</td><td>Account profile probe</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Markets</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Path</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method get">GET</span></td><td class="path">/markets/price?coin=BTC</td><td>Last price + change (INR preferred)</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/markets/movers?limit=10&amp;quote=INR</td><td>Top gainers / losers</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/markets/summary?coin=BTC&amp;period=1w</td><td><code>1h</code> <code>4h</code> <code>1d</code> <code>1w</code> <code>1m</code></td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/markets/spread?coin=BTC</td><td>Liquidity / spread from order book</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Orders</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Path</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/quote</td><td>Signed quote; returns <code>quote_id</code> + fees</td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/confirm</td><td>Body: <code>{ "quote_id" }</code>; waits for fill</td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/buy</td><td>Direct buy (<code>confirm: true</code>)</td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/sell</td><td>Direct sell; supports <code>all: true</code></td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/orders/count</td><td>Open order count</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/orders/active</td><td>Open orders list</td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/status-multiple</td><td>Body: <code>{ "ids": [...] }</code></td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/cancel-by-ids</td><td>Cancel many</td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/orders/create-multiple</td><td>Up to 10 orders</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/orders/history</td><td>Recent fills</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Wallets &amp; alerts</h3>
+      <table>
+        <thead><tr><th>Method</th><th>Path</th><th>Notes</th></tr></thead>
+        <tbody>
+          <tr><td><span class="method post">POST</span></td><td class="path">/wallets/transfer</td><td><code>currency</code>, <code>amount</code>, <code>from</code>/<code>to</code>: spot|futures</td></tr>
+          <tr><td><span class="method post">POST</span></td><td class="path">/alerts</td><td>Price watch: <code>coin</code>, <code>target_price_inr</code>, <code>direction</code></td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/alerts</td><td>List alerts</td></tr>
+          <tr><td><span class="method get">GET</span></td><td class="path">/alerts/check</td><td>Evaluate triggers</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="examples">
+      <h2>Examples</h2>
+      <h3>Health</h3>
+<pre>curl -s https://coindcx-muse-connector.vercel.app/health</pre>
+
+      <h3>Connect</h3>
+<pre>curl -s -X POST https://coindcx-muse-connector.vercel.app/account/connect \
+  -H "content-type: application/json" \
+  -H "x-connector-key: YOUR_CONNECTOR_KEY" \
+  -d '{"api_key":"YOUR_COINDCX_KEY","api_secret":"YOUR_COINDCX_SECRET"}'</pre>
+
+      <h3>Portfolio</h3>
+<pre>curl -s https://coindcx-muse-connector.vercel.app/account/portfolio \
+  -H "x-connector-key: YOUR_CONNECTOR_KEY" \
+  -H "X-COINDCX-CONNECTION: YOUR_CONNECTION_TOKEN"</pre>
+
+      <h3>Quote buy ₹200 USDT</h3>
+<pre>curl -s -X POST https://coindcx-muse-connector.vercel.app/orders/quote \
+  -H "content-type: application/json" \
+  -H "x-connector-key: YOUR_CONNECTOR_KEY" \
+  -H "X-COINDCX-CONNECTION: YOUR_CONNECTION_TOKEN" \
+  -d '{"side":"buy","coin":"USDT","amount_inr":200}'</pre>
+    </section>
+
+    <section id="limits">
+      <h2>Limits &amp; access requirements</h2>
+      <ul>
+        <li><strong>Account:</strong> KYC-verified CoinDCX India account with API key creation.</li>
+        <li><strong>Rate limit:</strong> ~200 requests / 15 minutes per IP on this connector; CoinDCX upstream limits also apply.</li>
+        <li><strong>Live orders:</strong> enabled when <code>ALLOW_LIVE_ORDERS=true</code> on the deployment.</li>
+        <li><strong>Deposits / cards:</strong> not supported — users fund CoinDCX themselves; connector only trades existing balance.</li>
+        <li><strong>Support:</strong> <a href="mailto:ashutosh.db.mail@gmail.com">ashutosh.db.mail@gmail.com</a></li>
+      </ul>
+    </section>
+
+    <section id="json">
+      <h2>Machine-readable index</h2>
+      <p>
+        Browsers get this page. Clients that want the raw endpoint map can use
+        <a href="/?format=json"><code>/?format=json</code></a>
+        or <a href="/api"><code>/api</code></a>.
+      </p>
+    </section>
+
+    <footer>
+      <nav>
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
+        <a href="/health">Health</a>
+        <a href="/?format=json">JSON index</a>
+        <a href="https://coindcx.com" rel="noopener">CoinDCX</a>
+      </nav>
+      <p>
+        Operator: Ashutosh Dubey · Unofficial Muse connector powered by CoinDCX public APIs.
+        Not affiliated with Meta or CoinDCX.
+      </p>
+    </footer>
+  </div>
+  <script>
+    fetch('/health').then(r => r.json()).then(d => {
+      const el = document.getElementById('health');
+      const chip = el.parentElement;
+      if (d && d.status === 'ok') {
+        chip.innerHTML = '<strong style="color:#3dd68c">● live</strong>&nbsp;' + (d.time || 'ok');
+      } else {
+        chip.innerHTML = '<strong style="color:#ff6b00">● degraded</strong>';
+      }
+    }).catch(() => {
+      document.getElementById('health').parentElement.innerHTML =
+        '<strong style="color:#ff6b00">● unreachable</strong>';
+    });
+  </script>
+</body>
+</html>
